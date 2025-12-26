@@ -54,7 +54,7 @@ app.get("/",(req,res)=>{
 //index Route 
 app.get("/listings",async (req,res)=>{
     const allListings=await Listing.find({});
-    res.render("./listings/index.ejs",{allListings})
+    res.render("./listings/index.ejs",{allListings});
         
 })
 

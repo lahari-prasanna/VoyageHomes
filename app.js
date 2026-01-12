@@ -73,6 +73,6 @@ app.get("/", (req, res) => {
   res.send("Root is working");
 });
 
-app.listen(8080, (req, res) => {
-  console.log("listening to port 8080");
+app.listen(3000, (req, res) => {
+  console.log("listening to port 3000");
 });

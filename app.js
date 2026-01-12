@@ -6,6 +6,7 @@ const Listing = require("./models/listing.js");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./ExpressError.js");
+const wrapAsync = require("./utils/wrapAsync.js");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -44,11 +45,14 @@ app.get("/listings/:id", async (req, res) => {
   res.render("./listings/show.ejs", { listing });
 });
 //edit route
-app.get("/listings/:id/edit", async (req, res) => {
-  let { id } = req.params;
-  const listing = await Listing.findById(id);
-  res.render("listings/edit.ejs", { listing });
-});
+app.get(
+  "/listings/:id/edit",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    const listing = await Listing.findById(id);
+    res.render("listings/edit.ejs", { listing });
+  })
+);
 
 app.post("/listings", (req, res) => {
   const newListing = new Listing(req.body.listing);
@@ -71,6 +75,10 @@ app.delete("/listings/:id", async (req, res) => {
 
 app.get("/", (req, res) => {
   res.send("Root is working");
+});
+
+app.use((err, req, res, next) => {
+  res.send("Something went wrong");
 });
 
 app.listen(3000, (req, res) => {

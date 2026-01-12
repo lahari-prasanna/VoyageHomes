@@ -1,26 +1,25 @@
 // WARNING: This script clears the database and inserts test data.
 // Only run in development, never in production.
 
-const mongoose= require('mongoose');
-const initData=require('./data.js');
-const Listing=require('../models/listing.js');
+const mongoose = require("mongoose");
+const initData = require("./data.js");
+const Listing = require("../models/listing.js");
 
-let MONGO_URL="mongodb://127.0.0.1:27017/VoyageHomes";
+let MONGO_URL = "mongodb://127.0.0.1:27017/VoyageHomes";
 
 main()
-    .then(()=>{
-        console.log("connection successful");
-    })
-    .catch(err => console.log(err));
+  .then(() => {
+    console.log("connection successful");
+  })
+  .catch((err) => console.log(err));
 
-
-async function main(){
-    await mongoose.connect(MONGO_URL);
+async function main() {
+  await mongoose.connect(MONGO_URL);
 }
 
-const initDB= async()=>{
-    await Listing.deleteMany({});
-    await Listing.insertMany(initData.data);
-    console.log("Data was initialized");
-}
+const initDB = async () => {
+  await Listing.deleteMany({});
+  await Listing.insertMany(initData.data);
+  console.log("Data was initialized");
+};
 initDB();

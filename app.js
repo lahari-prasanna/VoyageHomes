@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const wrapAsync = require("./utils/wrapAsync.js");
+const { listingSchema } = require("./Schema.js");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -26,6 +27,17 @@ main()
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
+
+const validateListing = (req, res, next) => {
+  const { error } = listingSchema.validate(req.body);
+
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
 
 app.get("/", (req, res) => {
   res.send("Root is working");
@@ -66,11 +78,10 @@ app.get(
 
 app.post(
   "/listings",
+  validateListing,
   wrapAsync(async (req, res) => {
-    if (!req.body.listing) {
-      throw new ExpressError(400, "Send valid data for listing");
-    }
     const newListing = new Listing(req.body.listing);
+
     await newListing.save();
     res.redirect("/listings");
   })
@@ -78,6 +89,7 @@ app.post(
 //UPDATE ROUTE
 app.put(
   "/listings/:id",
+  validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });

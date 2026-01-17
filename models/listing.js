@@ -1,33 +1,40 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
 const listingSchema = new schema({
-    title: {
-        type: String,
-        required: true
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+  },
+  image: {
+    filename: {
+      type: String,
+      default: "listingimage",
     },
-    description: {
-        type: String
+    url: {
+      type: String,
+      default:
+        "https://images.unsplash.com/photo-1720884413532-59289875c3e1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
-    image: {
-        filename: {
-            type: String,
-            default: "listingimage"
-        },
-        url: {
-            type: String,
-            default:"https://images.unsplash.com/photo-1720884413532-59289875c3e1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        }
+  },
+  price: {
+    type: Number,
+  },
+  location: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  reviews: [
+    {
+      type: schema.Types.ObjectId,
+      ref: "Review",
     },
-    price: {
-        type: Number
-    },
-    location: {
-        type: String
-    },
-    country: {
-        type: String
-    }
+  ],
 });
 
 const Listing = mongoose.model("Listing", listingSchema);

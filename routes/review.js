@@ -5,7 +5,11 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const Review = require("../models/review.js");
 
-const { isLoggedIn, validateReview } = require("../middleware.js");
+const {
+  isLoggedIn,
+  validateReview,
+  isReviewAuthor,
+} = require("../middleware.js");
 
 router.post(
   "/",
@@ -16,7 +20,7 @@ router.post(
     console.log(req.params.id);
     console.log(listing);
     let newReview = new Review(req.body.review);
-
+    newReview.author = req.user._id;
     listing.reviews.push(newReview);
 
     await newReview.save();
@@ -29,6 +33,7 @@ router.post(
 router.delete(
   "/:reviewId",
   isLoggedIn,
+  isReviewAuthor,
   wrapAsync(async (req, res) => {
     let { id, reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, {

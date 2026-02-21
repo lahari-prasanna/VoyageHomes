@@ -12,12 +12,11 @@ const Listing = require("./models/listing.js");
 const Review = require("./models/review.js");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const { MongoStore } = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-
-let MONGO_URL = "mongodb://127.0.0.1:27017/VoyageHomes";
 
 main()
   .then(() => {
@@ -26,7 +25,7 @@ main()
   .catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(process.env.MONGODB_URI);
 }
 
 //Routes Handling
@@ -41,8 +40,17 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+const store = MongoStore.create({
+  mongoUrl: process.env.MONGODB_URI,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600,
+});
+
 const sessionOptions = {
-  secret: "mysupersecretcode",
+  store: store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -52,8 +60,8 @@ const sessionOptions = {
   },
 };
 
-app.get("/", (req, res) => {
-  res.send("Root is working");
+store.on("error", () => {
+  console.log("Error in mongo sesson store", err);
 });
 
 app.use(session(sessionOptions));

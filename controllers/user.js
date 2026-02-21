@@ -1,4 +1,5 @@
 const User = require("../models/user");
+
 module.exports.signUpForm = (req, res) => {
   res.render("users/signup.ejs");
 };
@@ -13,7 +14,7 @@ module.exports.login = async (req, res) => {
   res.redirect(redirectUrl);
 };
 
-module.exports.signUpForm = async (req, res) => {
+module.exports.signUp = async (req, res) => {
   try {
     let { username, email, password } = req.body;
     const newUser = new User({ email, username });

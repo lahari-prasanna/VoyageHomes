@@ -19,6 +19,26 @@
     font-size:0.8rem;
   }
 </style>
+<style>
+  .custom-switch .custom-control-label::before {
+      left: -2.25rem;
+      width: 2rem;
+      pointer-events: all;
+      border-radius: 1rem;
+  }
+  .custom-switch .custom-control-label::after {
+      top: calc(.25rem + 2px);
+      left: calc(-2.25rem + 2px);
+      width: calc(1rem - 4px);
+      height: calc(1rem - 4px);
+      background-color: #fff;
+      border-radius: 1rem;
+      transition: transform .15s ease-in-out;
+  }
+  .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+      transform: translateX(1rem);
+  }
+  </style>
 <body>
   <!-- <h3>All listings</h3> -->
    <div id="filters">
@@ -58,6 +78,12 @@
       <div><i class="fa-solid fa-snowflake"></i></div>
       <p>Arctic</p>
     </div>
+    <div>
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="switch1">
+        <label class="custom-control-label" for="switch1"></label>
+      </div>
+    </div>
    </div>
 
   <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 mt-3">
@@ -87,3 +113,6 @@
     <div></div>
   </div>
 </body>
+
+
+

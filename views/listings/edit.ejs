@@ -5,6 +5,7 @@
     novalidate
     class="needs-validation"
     action="/listings/<%= listing._id %>?_method=PUT"
+    enctype="multipart/form-data"
   >
     <div class="row">
       <div class="col-8 offset-2">
@@ -40,15 +41,24 @@
         </div>
 
         <div class="mb-3">
-          <label for="image" class="form-label">Image</label>
-          <input
-            name="listing[image][url]"
-            value="<%- listing.image.url %>"
-            type="text"
-            class="form-control"
-            required
+          <p>Original Listing image</p>
+          <img
+            src="<%= listing.image.url %>"
+            alt=""
+            height="200"
+            width="300"
           />
-          <div class="invalid-feedback">Please Upload a image</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label"
+            >Upload New Image</label
+          >
+          <input
+            name="listing[image]"
+            type="file"
+            class="form-control"
+          />
         </div>
 
         <div class="row">
